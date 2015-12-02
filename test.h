@@ -1,0 +1,1 @@
+void testf(void);

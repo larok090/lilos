@@ -1,0 +1,67 @@
+.OS DESIGN NOTES:
+
+1. ENTRY PT FOR OS ADDRESS
+	- loader file in NASM assembler
+	- nasm -f elf32 loader.s
+	- need flags for multiboot, magic number, and checksum
+		 MAGIC_NUMBER 	equ	0x1BADBOO2
+		 FLAG		equ 	0x0
+		 CHECKSUM	equ	-MAGIC_NUMBER
+
+2. Framebuffer - hardware device capable of displaying a buffer of memory on the screen.
+		- has 80 columns and 25 rows 
+		- row and olumn indices start at 0
+
+	=> It is memory mapped
+	=> Starting addres @: 0x000B800
+	
+	Bit:     | 15 14 13 12 11 10 9 8 | 7 6 5 4 | 3 2 1 0 |
+	Content: | ASCII                 | FG      | BG      |
+	
+	ASCII: the character to print
+	FG: Foreground color - val 0 -15 
+	BG: Background color - val 0 - 15 //same colors as for foreground
+
+	@ref littleosbook.github.io
+
+3. Moving cursor (on the framebuffer)
+
+	-Done via 2 different I/O ports.
+	- Position determined with a 16 bit int, 0 => row 0 col 0
+						 1 => row 0 col 1
+					  	 80 => row 1 col 0 //wrapped around (so i % 80 = col, i = row)
+
+	Position is 16 bits but 'out' assembly instr arg is 8 bits ===> need to send instr in 2 turns
+								   ===> first 8 bits then the rest 8 bits
+
+	2 Ports:   
+			describes the data @: 0x3D4
+			data itself @: 0x3D5
+
+	example of setting cursor to row 1 col 0 (aka pos 80 = 0x0050 ) note this cant be done in C (out instr is not available)
+
+		out 0x3D4, 14		;14 tells framebuffer to expect the highest 8 bits of the position (to the describe port)
+		out 0x3D5, 0x00		; sending highest 8 bits of 0x0050 -> 0x00; (to the data port)
+		out 0x3d4, 15		; 15 tells the fb to expect the lowest 8 bits of position
+		out 0x3D5, 0x50		; the low 8 bits of 0x0050 => 0x50;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
