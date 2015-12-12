@@ -1,1 +1,0 @@
-void testf(void);
