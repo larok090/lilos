@@ -1,0 +1,47 @@
+U.S.E.L-OS (uncomplicated sample exercise little OS)
+-----------------------------------------------
+
+Boot : 
+	/* todo */
+
+Structure:
+	
+~/kmain.c (12/12/15 O.B):
+-------------------------------------------
+	- Entry point to the Kernel using C code (called from Assembly)
+	- Flushes anything that could possibly be in the frame_buffer
+	- Clears the screen of all previously printed messages
+	- Prints "Hello (Kernel) World" on boot		
+
+
+~/IO
+------------------------------------------
+	+ io.h	
+	+ io.c
+	+ ser_pt.c
+	+ asm_io.s
+	
+io.h functions:
+	+ inb				- function wrapper for "in" assembly instruction	
+	+ outb				- function wrapper for "out" assemby instruction
+	+ fb_write_cell		- write character in a given cell of framebuffer
+	+ fb_move_cursor	- move cursor on screen 	
+	+ fb_flush 			- sets all of frame buffer mem to 0 (like memset b/c no stdlib)
+	+ clear_screen		- prints the entirety of frame buffer to be '\0' i.e clear
+	+ write 			- Write a given buffer to stdout through use of framebuffer
+
+io.c 		- implementation of io.h
+asm_io.s 	- out/in instruction implementation (assembly)
+
+ser_pt.c - SERIAL PORT configurations:
+---------------------------------------
+	+ serial_configure_line			- Configure line for a given serial port set to 0x03
+										0x03 flag (hardcoded now 12/12/15 O.B):
+											- 8 bit length of transefer
+											- no parity bit
+											- 1 stop bit
+											- break control disabled (*)
+
+	+ serial_configure_baud_rate	- using default speed of serial port (115200 bits/s)
+										calculate correct baud rate using divisor argument
+										passed in
