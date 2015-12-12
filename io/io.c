@@ -1,22 +1,79 @@
 #include "io.h"
 
-/* The I/O ports */
-#define FB_COMMAND_PORT			0x3D4
-#define FB_DATA_PORT			0x3D5
 
-/* The I/O port commands*/
-#define FB_HIGH_BYTE_COMMAND	14
-#define FB_LOW_BYTE_COMMAND		15
+/********************************************************************************\
+ *		TODO:
+ *		1. Wrap WRITE function into a circular buffer 
+ *		2. Bonus: look into why clear_screen doesnt let you put the cursor
+ *			anywhere past end of text + 1 cell slots
+ *
+\*******************************************************************************/
 
-/* Colors */
-#define FB_BLACK				0
-#define FB_GREEN 				2
-#define FB_DARK_GREY			8
-#define FB_WHITE				15
 
+/* write black and white character to output move cursor to where it was written*/
+#define FB_WRITE_CHAR_BW(i, c)						\
+	fb_write_cell( (i), (c),FB_BLACK, FB_WHITE );	\
+	fb_move_cursor( ((i)/2) + 1 );					\
+	(i) += 2
 
 /* Framebuffer (for displaying chracters on screen) */
 char *fb = (char *)0x000B8000;
+/* Index of framebuffer at this moment */
+unsigned int cur_fb_pos = 0;
+
+
+/** WRITE SECTION BEGINS HERE **/
+
+
+/*
+ * Not sure if cursor works but screen cleared 
+ */
+void clear_screen( void )
+{
+	int  fb_pos = 0;
+	char blank = (char)0;
+
+	//WHY ARE YOU GREEEN
+	while(fb_pos < FB_MAX_SIZ ){
+		fb_write_cell( fb_pos, blank , FB_BLACK  , FB_BLACK );	
+		fb_pos++;
+	}
+}
+	
+/**
+ * Write the given buffer to the stdout in our case the shell
+ */
+int write(char *buf, unsigned int len)
+{
+	unsigned int i = 0;
+
+	/* sanity check */
+	if(!len)
+		return -1;
+	if(!buf)
+		return -1;	
+
+	for( i=0; i < len; i++){
+		/* do not overflow the buffer - best effort - return num chars written */
+		if(cur_fb_pos + 2 > FB_MAX_SIZ)
+			return i-2;
+
+		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);
+		
+	}
+	/* after FB_WRITE_CHAR the cursor is at next empty position
+	 * This means that its 2 cursor slots ahead because of how
+	 * fb_write_cell works (cells being 16 bits long) and the macro
+	 * i - 1 is the first spot after our printed line
+	 */
+	 fb_move_cursor(i-1);
+
+	return i;
+}
+/** END WRITE SEC **/
+
+
+/*** FRAME BUFFER OPERATIONS START ***/
 
 /** 
  * fb_move_cursor:
@@ -33,17 +90,29 @@ void fb_move_cursor(unsigned short pos)
 	outb(FB_DATA_PORT,	pos & 0x00FF);
 }
 
-
 /** fb_write_cell:
- * Writes char given foreground and background to position i
- * in the frambuffer.
- *
- * @param i	The location in the gramebuffer
- * @param c 	The character
- * @param fg	The foreground color
- * @param bg	The background color
+ * 		Writes char given foreground and background to position i
+ * 		in the frambuffer.
  */
-void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg){	
+void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
+{
 	fb[i] = c;
 	fb[i+1] = ((fg & 0x0F) << 4) | (bg & 0x0F); 
 }
+
+/* Clear out the frame buffer reserved mem area */
+void fb_flush( void )
+{
+	int i;
+	char *fb_tmp = fb;
+
+	for( i = 0; i < FB_MAX_SIZ; i++){
+		fb_tmp = 0;
+		fb_tmp++;
+	}
+}
+/** FRAME BUFFER OPERATIONS END ***/
+
+
+/*** SERIAL PORT OPERATIONS START ***/
+

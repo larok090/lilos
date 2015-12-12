@@ -1,4 +1,4 @@
-OBJECTS = loader.o kmain.o ./io/io.o ./io/asm_io.o 
+OBJECTS = loader.o kmain.o io/asm_io.o io/io.o io/ser_pt.o
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
@@ -35,4 +35,5 @@ kernel.elf: $(OBJECTS)
 
 clean:
 	rm -rf *.o kernel.elf os.iso
+	rm -rf ./io/*.o
 
