@@ -1,4 +1,5 @@
 #include "io.h"
+
 /********************************************************************************\
  *		TODO:
  *		1. Wrap WRITE function into a circular buffer 
@@ -49,8 +50,13 @@ int write(char *buf, unsigned int len)
 
 	for(i = 0; i < len; i++){
 		/* do not overflow the buffer - best effort - return num chars written */
-		if(cur_fb_pos + 2 > FB_MAX_SIZ)
+		if(cur_fb_pos + 2 > FB_MAX_SIZ){
+			/* buffer full -> flush return the #bytes written */
+			fb_flush();
+			
 			return i-2;
+		}
+
 
 		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);		
 	}
@@ -74,6 +80,8 @@ int write(char *buf, unsigned int len)
  * 	Moves the cursor of the framebuffer to the given position
  *
  * 	@param pos The new position of the cursor
+ *
+ * 	@author littleosbook.github.io
  */
 void fb_move_cursor(unsigned short pos)
 {
@@ -87,6 +95,8 @@ void fb_move_cursor(unsigned short pos)
  * fb_write_cell:
  * 		Writes char given foreground and background colors to position i
  * 		in the frambuffer.
+ *
+ * 	@author littleosbook.github.io
  */
 void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
 {
@@ -110,6 +120,7 @@ void fb_flush( void )
 /**
  * m_printf:
  * 	Prints to the source defined by mode argument:
+ *			Best effort , writes as much as it can gives back that #
  *
  * 	@param  mode	0: print to screen
  * 					any other number is treated as COM address		 

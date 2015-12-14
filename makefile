@@ -5,7 +5,7 @@ LDFLAGS = -T link.ld -melf_i386
 AS = nasm
 ASFLAGS = -f elf
 
-IO_OBJ = io/asm_io.o io/io.o io/serial.o
+IO_OBJ = io/asm_io.o io/io.o io/serial.o io/str_util.o io/log.o
 OBJECTS = loader.o kmain.o $(IO_OBJ)
 
 all: kernel.elf

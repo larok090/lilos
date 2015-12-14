@@ -91,7 +91,12 @@ REST of offsets (that are defined for uselOS [12/12/15 O.B])
 
 
 
+==========================================================================
+STR_UTIL.H
 
+1. k_str_len(char *str);
+	- checks up to the max length of 128 bytes of a string and gives back the str length 
+	- max only there if there is no null terminating symbol
 
 
 
