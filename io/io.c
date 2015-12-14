@@ -1,14 +1,9 @@
 #include "io.h"
-
-
 /********************************************************************************\
  *		TODO:
  *		1. Wrap WRITE function into a circular buffer 
- *		2. Bonus: look into why clear_screen doesnt let you put the cursor
- *			anywhere past end of text + 1 cell slots
  *
 \*******************************************************************************/
-
 
 /* write black and white character to output move cursor to where it was written*/
 #define FB_WRITE_CHAR_BW(i, c)						\
@@ -23,7 +18,6 @@ unsigned int cur_fb_pos = 0;
 
 
 /** WRITE SECTION BEGINS HERE **/
-
 
 /*
  * Not sure if cursor works but screen cleared 
@@ -41,7 +35,7 @@ void clear_screen( void )
 }
 	
 /**
- * Write the given buffer to the stdout in our case the shell
+ * Write the given buffer to screen
  */
 int write(char *buf, unsigned int len)
 {
@@ -53,14 +47,14 @@ int write(char *buf, unsigned int len)
 	if(!buf)
 		return -1;	
 
-	for( i=0; i < len; i++){
+	for(i = 0; i < len; i++){
 		/* do not overflow the buffer - best effort - return num chars written */
 		if(cur_fb_pos + 2 > FB_MAX_SIZ)
 			return i-2;
 
-		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);
-		
+		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);		
 	}
+
 	/* after FB_WRITE_CHAR the cursor is at next empty position
 	 * This means that its 2 cursor slots ahead because of how
 	 * fb_write_cell works (cells being 16 bits long) and the macro
@@ -83,15 +77,15 @@ int write(char *buf, unsigned int len)
  */
 void fb_move_cursor(unsigned short pos)
 {
-	/* TODO - unravel this-> write to notes */
 	outb(FB_COMMAND_PORT, 	FB_HIGH_BYTE_COMMAND); 
 	outb(FB_DATA_PORT,	((pos >> 8) & 0x00FF));
 	outb(FB_COMMAND_PORT, 	FB_LOW_BYTE_COMMAND);
 	outb(FB_DATA_PORT,	pos & 0x00FF);
 }
 
-/** fb_write_cell:
- * 		Writes char given foreground and background to position i
+/** 
+ * fb_write_cell:
+ * 		Writes char given foreground and background colors to position i
  * 		in the frambuffer.
  */
 void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
@@ -113,6 +107,43 @@ void fb_flush( void )
 }
 /** FRAME BUFFER OPERATIONS END ***/
 
+/**
+ * m_printf:
+ * 	Prints to the source defined by mode argument:
+ *
+ * 	@param  mode	0: print to screen
+ * 					any other number is treated as COM address		 
+ * 	@param	buf		The buffer to be printed
+ *	@param	len		Length of the buffer
+ *
+ *	@return			Mode = 0: #of bytes written
+ *					Mode = N: 0
+ */
+int m_printf(unsigned short mode, char *buf, unsigned int len)
+{
+	int	wrote = 0;
 
-/*** SERIAL PORT OPERATIONS START ***/
+	if(!mode)
+		return -1; //Need to get errors 
+	if(!buf)
+		return 0;
+	if(!len)
+		return 0;
 
+	/* Extendable for more serial ports */
+	switch(mode){
+		case TO_SCREEN:
+			wrote = write( buf, len);
+			break;
+		case SERIAL_COM1_BASE:
+		case SERIAL_COM2_BASE:
+			serial_write(mode, buf, len);	
+			wrote = 0;
+			break;
+		default:
+			wrote = -1;
+			break;
+	}
+	
+	return wrote;
+}

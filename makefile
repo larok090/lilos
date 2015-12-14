@@ -1,10 +1,12 @@
-OBJECTS = loader.o kmain.o io/asm_io.o io/io.o io/ser_pt.o
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-	 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+	-nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
 LDFLAGS = -T link.ld -melf_i386
 AS = nasm
 ASFLAGS = -f elf
+
+IO_OBJ = io/asm_io.o io/io.o io/serial.o
+OBJECTS = loader.o kmain.o $(IO_OBJ)
 
 all: kernel.elf
 

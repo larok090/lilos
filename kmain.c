@@ -5,21 +5,28 @@
  \**************************************************************************/
 #include "io/io.h"
 
+#define TEST_STR_LEN	21
 
-// TODO : change green on clear_screen
 // TODO : sanity checks / min / overflow protection on frame buffer
 int kmain()
 {
-
+	char 	buf[TEST_STR_LEN];
 	/* zero out the frame buffer area */
 	fb_flush();
 
 	/* make the screen blank (clear all initial load messages from bochs) */
-	clear_screen();
+	clear_screen(); 
 
 	/* hello world! */
-	char buf[21] = "hello (kernel) world";	
-	write( buf, 21);
+	buf = "hello (kernel) world";	
+	m_printf(TO_SCREEN, buf, TEST_STR_LEN);
+
+	/* Serial Init */
+	serial_configure_baud_rate(SERIAL_COM1_BASE, 2);
+	serial_configure_line(SERIAL_COM1_BASE);
+
+	/* serial print */ 
+	m_printf(SERIAL_COM1_BASE, buf, TEST_STR_LEN - 1); // -1 because of null term str
 
 	return 0;
 }

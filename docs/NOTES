@@ -47,6 +47,39 @@
 
 
 
+4. Serial ports /* INCOMPLETE */
+
+
+Each port is refered to as a COM port (currently my code has defined addresses for COM1 and COM2 [12/12/15 O.B])
+
+To send or recieve we need to set the BAUD rate for a port
+==================================================================================================================
+BAUD rate: Speed at which the serial line switches between its two states (send / recieve). 
+			This is not equivalent to bits/s because in serial transmission there is a start and a stop bit 
+			[on an  8/N/1 line 10 baud = 1 byte ]
+==================================================================================================================
+
+Each COM port has a set of registers (1 and 0) (for uselOS its 8 bit registers)
+In reality they are just bits of an address space 
+	- these are MACRO DEFINED in serial.c file [12/12/15 O.B] 
+
+regs 0 and 1 depend on the setting of DLAB (divisor latch access bit)
+when DLAB = 0
+offset 0 : data register (read from recieve buffer, write to transmit buffer)
+offset 1 : Interrupt enable register /* read more on this IRQ lines or just serial stuff*/
+
+DLAB = 1
+offset 0: least significant byte of divisor for BAUD rate
+offset 1: most significant byte of divisor for BAUD rate
+
+REST of offsets (that are defined for uselOS [12/12/15 O.B])
+2. FIFO_COMMAND_PORT 
+3. LINE_COMMAND_PORT
+4. SERIAL_MODEM_COMMAND_PORT
+5. SERIAL_LINE_STATUS_PORT
+
+
+
 
 
 

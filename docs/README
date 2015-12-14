@@ -45,3 +45,27 @@ ser_pt.c - SERIAL PORT configurations:
 	+ serial_configure_baud_rate	- using default speed of serial port (115200 bits/s)
 										calculate correct baud rate using divisor argument
 										passed in
+
+
+
+
+IO MACROS
+============================
+#define TO_SCREEN	0xFFF
+	-magic number identifier 
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
