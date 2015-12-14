@@ -34,6 +34,8 @@ void clear_screen( void )
 		fb_write_cell( fb_pos, blank , FB_BLACK  , FB_BLACK );	
 		fb_pos++;
 	}
+
+	cur_fb_pos = 0;
 }
 	
 /**

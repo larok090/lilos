@@ -4,11 +4,8 @@
 /* arbitrary choice for max num bytes strlen will check length */
 #define MAX_STRLEN_CHK		128
 
-/** str_len:
- *
- * @return length of a character string
- */
-int k_str_len(char *str);
-
+int 		k_str_len(char *str);
+inline void k_str_cat(char *a, char *b, char *result); 
+inline int 	str_cat_len(char *a, char *b);
 
 #endif /* INCLUDE_STR_UTIL_H */
