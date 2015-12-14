@@ -13,10 +13,6 @@ void log_msg(const int mode, char *buf, int len)
 	char debug[8] = "[DEBUG] ";
 	char info[7]  = "[INFO] ";
 
-	int l = k_str_len(buf);
-	if(len != l)
-		return ;
-
 	// get a str_cat;
 	switch(mode){
 		case L_ERROR:
