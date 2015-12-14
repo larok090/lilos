@@ -22,17 +22,13 @@ int kmain()
 	char buf[TEST_STR_LEN] = "hello (kernel) world";	
 	m_printf(TO_SCREEN, buf, TEST_STR_LEN);
 
-	/* Serial Init */
-	serial_configure_baud_rate(SERIAL_COM1_BASE, 2);
-	serial_configure_line(SERIAL_COM1_BASE);
+	/* Serial Init Ports 1 & 2*/
+	serial_init(1,2);
+	serial_init(2,2);
 
-	/* serial print */ 
-	m_printf(SERIAL_COM1_BASE, buf, TEST_STR_LEN - 1); // -1 because of null term str
-
-	/* Serial Init Com 2 */
-	serial_configure_baud_rate(SERIAL_COM2_BASE, 2);
-	serial_configure_line(SERIAL_COM2_BASE);
-	
+	/* Serial Print Test to both*/ 
+	m_printf(SERIAL_COM1_BASE, buf, TEST_STR_LEN - 1); // -1 because of null term str	
+	m_printf(SERIAL_COM2_BASE, buf, TEST_STR_LEN - 1); // -1 because of null term str
 
 	return 0;
 }

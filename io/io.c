@@ -14,14 +14,15 @@
 
 /* Framebuffer (for displaying chracters on screen) */
 char *fb = (char *)0x000B8000;
+
 /* Index of framebuffer at this moment */
 unsigned int cur_fb_pos = 0;
 
 
 /** WRITE SECTION BEGINS HERE **/
 
-/*
- * Not sure if cursor works but screen cleared 
+/** clear_screen:
+ * 		Sets all the bytes of the frame buffer to display \0 with black on black 
  */
 void clear_screen( void )
 {
@@ -36,7 +37,12 @@ void clear_screen( void )
 }
 	
 /**
- * Write the given buffer to screen
+ * Write the given buffer to the stdout in our case the shell
+ *
+ * @param len	length of the buffer
+ * @param buf 	The buffer with content to be written to shell
+ *
+ * @return 		The amt of characters written from buf
  */
 int write(char *buf, unsigned int len)
 {
@@ -57,7 +63,6 @@ int write(char *buf, unsigned int len)
 			return i-2;
 		}
 
-
 		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);		
 	}
 
@@ -72,9 +77,7 @@ int write(char *buf, unsigned int len)
 }
 /** END WRITE SEC **/
 
-
 /*** FRAME BUFFER OPERATIONS START ***/
-
 /** 
  * fb_move_cursor:
  * 	Moves the cursor of the framebuffer to the given position
@@ -85,18 +88,22 @@ int write(char *buf, unsigned int len)
  */
 void fb_move_cursor(unsigned short pos)
 {
-	outb(FB_COMMAND_PORT, 	FB_HIGH_BYTE_COMMAND); 
-	outb(FB_DATA_PORT,	((pos >> 8) & 0x00FF));
-	outb(FB_COMMAND_PORT, 	FB_LOW_BYTE_COMMAND);
-	outb(FB_DATA_PORT,	pos & 0x00FF);
+	_outb(FB_COMMAND_PORT, 	FB_HIGH_BYTE_COMMAND); 
+	_outb(FB_DATA_PORT,	((pos >> 8) & 0x00FF));
+	_outb(FB_COMMAND_PORT, 	FB_LOW_BYTE_COMMAND);
+	_outb(FB_DATA_PORT,	pos & 0x00FF);
 }
 
-/** 
- * fb_write_cell:
- * 		Writes char given foreground and background colors to position i
+/** fb_write_cell:
+ * 		Writes char given foreground and background to position i
  * 		in the frambuffer.
  *
- * 	@author littleosbook.github.io
+ * @param i		The location in the framebuffer
+ * @param c 	The character
+ * @param fg	The foreground color
+ * @param bg	The background color
+ *
+ * @author littleosbook.github.io
  */
 void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
 {

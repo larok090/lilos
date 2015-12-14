@@ -16,6 +16,8 @@
  *
  * @param com      The COM port to configure
  * @param divisor  The divisor
+ *
+ * @author littleosbook.github.io
  */
 void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
 {
@@ -23,9 +25,9 @@ void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
 	 * current configuration of bochs emulator for this project does
 	 * high 8 bits first then low [12/12/15 O.B])
 	 */
-	outb(SERIAL_LINE_COMMAND_PORT(com), SERIAL_LINE_ENABLE_DLAB);
-	outb(SERIAL_DATA_PORT(com), (divisor >> 8) & 0x00FF); 	/* high 8 bits*/
-	outb(SERIAL_DATA_PORT(com), divisor & 0x00FF);			/* low 8 bits*/
+	_outb(SERIAL_LINE_COMMAND_PORT(com), SERIAL_LINE_ENABLE_DLAB);
+	_outb(SERIAL_DATA_PORT(com), (divisor >> 8) & 0x00FF); 	/* high 8 bits*/
+	_outb(SERIAL_DATA_PORT(com), divisor & 0x00FF);			/* low 8 bits*/
 
 	return;
 }
@@ -36,6 +38,8 @@ void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
  * disabled.
  *
  * @param com The serial port to configure
+ * 
+ * @author littleosbook.github.io
  */
 void serial_configure_line(unsigned short com)
 {
@@ -44,7 +48,7 @@ void serial_configure_line(unsigned short com)
 	 * Content:		| d | b | prty  | s |  dl |
 	 * Value:		| 0 | 0 | 0 0 0 | 0 | 1 1 | = 0x03
 	 */
-	outb(SERIAL_LINE_COMMAND_PORT(com), 0x03);
+	_outb(SERIAL_LINE_COMMAND_PORT(com), 0x03);
 
 	return;
 }
@@ -56,11 +60,13 @@ void serial_configure_line(unsigned short com)
  *	@param	com	The COM port
  *	@return	0	if the transmit FIFO queue is not empty
  *			1	if the transmit FIFO queue is empty
+ *
+ *	@author littleosbook.github.io
  */
 int serial_is_transmit_fifo_empty(unsigned short com)
 {
 	/* 0x20 = 0010 0000 */
-	return inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
+	return _inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
 }
 
 /** 
@@ -84,9 +90,39 @@ void serial_write(unsigned short com, char *buf, unsigned int len)
 		/* spin the data transmit port being NON-empty */
 		while(serial_is_transmit_fifo_empty(com) == 0); 
 		
-		outb(SERIAL_DATA_PORT(com), *buf);
+		_outb(SERIAL_DATA_PORT(com), *buf);
 		buf += 1;
 	}
 		
 	return;
+}
+
+/** serial_init:
+ * 		initializes a serial port com1 or com2 with divisor for baud rate config
+ * 		Config bits set - 0x03 - data len 8 bits. no pairty bits, 1 stop bit 
+ * 		break ctrl off
+ *
+ * 		@return		 0: success
+ * 					-1: failure
+ */
+int serial_init(const unsigned short pt_num, const unsigned short div)
+{
+	if(!div)
+		return -1;
+
+	switch(pt_num)
+	{
+		case 1:
+			serial_configure_baud_rate(SERIAL_COM1_BASE, div);
+			serial_configure_line(SERIAL_COM1_BASE);
+			break;
+		case 2:
+			serial_configure_baud_rate(SERIAL_COM2_BASE, div);
+			serial_configure_line(SERIAL_COM2_BASE);
+			break;
+		default:
+			return -1;
+	}
+
+	return 0;
 }
