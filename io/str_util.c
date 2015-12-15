@@ -7,39 +7,45 @@
  */
 int k_str_len(char *str)
 {
-	int len = 0;
-	
-	while(str[len] != '\0')
-		len++;
+	int len;	
+	for(len = 0; str[len] != '\0'; len++);
 	
 	return len;
 }
 
+/**
+ * DO NOT USE THESE , 
+ *
+ * NO EXPLICIT MEMORY SET UP YET 
+ * NO WAY TO TEST
+ * NO ACTUAL RESULTS ---> future work to be done
+ */
+
 /** k_str_cat:
- *				
+ *			
  *
  */
-inline void k_str_cat(char *a, char *b, char *result)
+void k_str_cat(char *a, char *b, char *result)
 {	
 	int i,j;	
+	int tot = 0;
 	
-	for(i = 0; i < k_str_len(a); i++){
-		*result = a[i];
-		result++;
+	for(i = 0; i < k_str_len(a);i++){// k_str_len(a); i++){
+		result[i] = a[i];
+		tot++;
 	}
 	
-	for(j = 0;j < k_str_len(b); j++){
-		*result = b[i];
-		result++;
+	for(j = 0;j < k_str_len(b);j++){//k_str_len(b); j++){
+		result[i+j] = b[i];
+		tot++;
 	}
 
-	*result = '\0';
 }
 
 /**	str_cat_len:
  * 		Return sum of both char string lengths + 1;
  */
-inline int str_cat_len(char *a, char *b)
+int str_cat_len(char *a, char *b)
 {	
-	return k_str_len(a) + k_str_len(b) + 1;
+	return k_str_len(a) + k_str_len(b);
 }

@@ -8,8 +8,8 @@
 
 /* write black and white character to output move cursor to where it was written*/
 #define FB_WRITE_CHAR_BW(i, c)						\
-	fb_write_cell( (i), (c),FB_BLACK, FB_WHITE );	\
-	fb_move_cursor( ((i)/2) + 1 );					\
+	fb_write_cell( (i), (c), FB_BLACK, FB_WHITE );	\
+	fb_move_cursor((i)/2 + 1);					\
 	(i) += 2
 
 /* Framebuffer (for displaying chracters on screen) */
@@ -27,11 +27,11 @@ unsigned int cur_fb_pos = 0;
 void clear_screen( void )
 {
 	int  fb_pos = 0;
-	char blank = (char)0;
+	char blank = '\0';
 
 	//WHY ARE YOU GREEEN
 	while(fb_pos < FB_MAX_SIZ ){
-		fb_write_cell( fb_pos, blank , FB_BLACK  , FB_BLACK );	
+		fb_write_cell( fb_pos, blank , FB_BLACK  , FB_BLACK);	
 		fb_pos++;
 	}
 
@@ -60,11 +60,9 @@ int write(char *buf, unsigned int len)
 		/* do not overflow the buffer - best effort - return num chars written */
 		if(cur_fb_pos + 2 > FB_MAX_SIZ){
 			/* buffer full -> flush return the #bytes written */
-			fb_flush();
-			
+			fb_flush();	
 			return i-2;
 		}
-
 		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);		
 	}
 
@@ -73,7 +71,7 @@ int write(char *buf, unsigned int len)
 	 * fb_write_cell works (cells being 16 bits long) and the macro
 	 * i - 1 is the first spot after our printed line
 	 */
-	 fb_move_cursor(i-1);
+	 fb_move_cursor(i+1);
 
 	return i;
 }
