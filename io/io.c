@@ -19,8 +19,8 @@ char *fb = (char *)0x000B8000;
 unsigned int cur_fb_pos = 0;
 
 
-/** WRITE SECTION BEGINS HERE **/
 
+/** WRITE SECTION BEGINS HERE **/
 /** clear_screen:
  * 		Sets all the bytes of the frame buffer to display \0 with black on black 
  */

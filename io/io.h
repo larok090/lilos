@@ -24,6 +24,8 @@
 #define SERIAL_COM1_BASE		0x3F8		/* COM1 base port */
 #define SERIAL_COM2_BASE		0x2F8		/* COM2 base port */
 
+
+
 /** (asm)_outb:
  * 	Sends the given data to the given I/O port. Defnied in io.s
  *
@@ -42,7 +44,7 @@ inline unsigned char _inb(unsigned short port);
 
 void 	fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg);	
 void 	fb_move_cursor(unsigned short pos);
-void 	fb_flush( void );
+void 	fb_flush(void);
 
 void 	serial_configure_baud_rate(unsigned short com, unsigned short divisor);
 void 	serial_configure_line(unsigned short com);
@@ -55,5 +57,6 @@ void 	serial_write(unsigned short com, char *buf, unsigned int len);
 int 	write(char *buf, unsigned int len);
 
 int 	m_printf(unsigned short mode,char *buf,unsigned int len);
+
 
 #endif /* INCLUDE_IO_H */
