@@ -5,15 +5,14 @@
 ;			                             		  				  ;
 ;=================================================================;
 
-[GLOBAL _gdt_flush]
+[GLOBAL gdt_flush]
 
 ;; _init_gdt:
 ;;	as	0x00 - first byte remains NULL 
-;;	1	asx08 - kernel code segment - 0x00000000 to 0xFFFFFFFF - RW - PL0
-;;	2	asx10 - kernel data segment - 0x00000000 to 0xFFFFFFFF - RW - PL0
+;;	1	0x08 - kernel code segment - 0x00000000 to 0xFFFFFFFF - RW - PL0
+;;	2	0x10 - kernel data segment - 0x00000000 to 0xFFFFFFFF - RW - PL0
 
-_gdt_flush:
-
+gdt_flush:
 	mov eax, [esp + 4]			; move the gdt struct param into eax
 	lgdt [eax]					; load the gdt into the processor
 
@@ -24,6 +23,5 @@ _gdt_flush:
 	mov gs, ax
 	mov ss, ax
 	jmp 0x08:.flush
-
 .flush:
-		ret						;now we have set cs to 0x08
+	ret						;now we have set cs to 0x08

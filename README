@@ -55,6 +55,9 @@ log.c - LOGGING UTILITIES
 	- Uses com2 serial port to log to a file debug.log
 	
 	+ log_msg to print the right message with a certain tag
+
+
+DESCRIPTOR TABLES WORKING !!! WOOOO [01/19/2016]
 	
 IO MACROS
 ============================

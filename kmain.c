@@ -6,12 +6,14 @@
 #include "io/io.h"
 #include "io/str_util.h"
 #include "io/log.h"
+#include "io/descriptor_tables.h"
 
 #define TEST_STR_LEN	21
 
 // TODO : sanity checks / min / overflow protection on frame buffer
 int kmain()
 {
+	init_descriptor_tables();
 	/* zero out the frame buffer area */
 	fb_flush();
 
@@ -28,7 +30,8 @@ int kmain()
 
 	/* Serial Print Test to both*/ 
 	m_printf(SERIAL_COM1_BASE, buf, k_str_len(buf)); // -1 because of null term str	
-	m_printf(SERIAL_COM2_BASE, buf, k_str_len(buf)); // -1 because of null term str
+	char str[5] = "OSKAR";
+	m_printf(SERIAL_COM2_BASE, str, 5); // -1 because of null term str
 
 	return 0;
 }
