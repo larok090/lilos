@@ -14,6 +14,11 @@
 int kmain()
 {
 	init_descriptor_tables();
+	
+	/* Serial Init Ports 1 & 2*/
+	serial_init(1,2);			// general serial port
+	serial_init(2,2);			// error log serial port
+
 	/* zero out the frame buffer area */
 	fb_flush();
 
@@ -24,14 +29,12 @@ int kmain()
 	char buf[TEST_STR_LEN] = "hello (kernel) world";	
 	m_printf(TO_SCREEN, buf, k_str_len(buf));
 
-	/* Serial Init Ports 1 & 2*/
-	serial_init(1,2);
-	serial_init(2,2);
 
-	/* Serial Print Test to both*/ 
-	m_printf(SERIAL_COM1_BASE, buf, k_str_len(buf)); // -1 because of null term str	
-	char str[5] = "OSKAR";
-	m_printf(SERIAL_COM2_BASE, str, 5); // -1 because of null term str
+	char str[11] = "ERROR: TEST";
+	m_printf(SERIAL_COM2_BASE, str, 11); 
+
+	asm volatile ("int $0x3");
+	asm volatile ("int $0x4");
 
 	return 0;
 }

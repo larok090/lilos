@@ -2,10 +2,12 @@
 ;								  								  ;
 ;		asm_lgdt.s - Initialization procedure for loading		  ;
 ;			         the global segment descriptor table		  ; 
+;		@author 	www.jamesmolloy.co.uk 
 ;			                             		  				  ;
 ;=================================================================;
 
 [GLOBAL gdt_flush]
+[GLOBAL idt_flush]
 
 ;; _init_gdt:
 ;;	as	0x00 - first byte remains NULL 
@@ -23,5 +25,11 @@ gdt_flush:
 	mov gs, ax
 	mov ss, ax
 	jmp 0x08:.flush
+
 .flush:
-	ret						;now we have set cs to 0x08
+	ret							;now we have set cs to 0x08
+
+idt_flush:
+	mov eax, [esp + 4]			; Get the pointer to the IDT, passed as a parameter.
+	lidt [eax]					; Load the IDT pointer.
+	ret

@@ -1,30 +1,18 @@
-TODO [12/22/15]
+TODO [01/19/2016]
 ==========================================================
+[1] Write the docs for descriptor_tables.c and interrupt handler
 
-[1] Segmentation still not working , have to double check all my offsets
-	read about the memory I have on my set up VM 
-		-> Might be overflowing but im getting a good idea about how
-			this table operates
-		-> Have to keep digging 
+[2] REORGANIZE - move stuff to common.h in UTILS 
 
-[2] Try to use the code i have just modify limits etc
+[3] COMMENT interupt code stuff - update notes / readme 
 
-[3] Write the docs for descriptor_tables.c
+[4] #5 on low prio should be easy enough
 
-
-
-TODO [12/19/15]
-==========================================================
-
-[V] Segmentation - get a GDT to load into the processor
-
-[V] Load the two necessary segment selectors into the segment-selector registers
-
-[X] If works -> move on come back to this later to make sure I understood this
+==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
+		now would be a good time to revisit code structure 
 
 
-TODO [12/13/15]
-==============================================================
+-----------------------------------------------------------------------
 
 [DELAYED] Str_utils are funky .. need to go through all the sizes (include and not '\0')
 	[MAYBE] an issue with m_printf's len argument and how that's done
@@ -33,9 +21,6 @@ TODO [12/13/15]
 [DELAYED] str_utils.h  - BACKBURNER - need memory have to do that first  not enough space
 	- need functions to print integers for return val printing 
 
-
-[V] OUTPUT NEEDS TO BE RESET so i can keep writing stuff because of buffering
-	aka set stuff to 0 after writing go off current pos of cursor
 -----------------------------------------------------------------------
 
 
@@ -49,6 +34,4 @@ LOW PRIO
 
 3. [LATER WORK - @timer] A good timeout mechanism / read up more on serial port write management
 
-4. CONSTANTS.TXT -> add a breakdown of all macrod constants
-
-5. Cursor still wonky - doesnt display after clear screen
+5. Cursor still wonky - doesnt display after clear screen COME BACK TO IT USING JAMESMOLLOY.co.uk
