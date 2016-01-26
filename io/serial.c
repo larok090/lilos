@@ -19,7 +19,7 @@
  *
  * @author littleosbook.github.io
  */
-void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
+void serial_configure_baud_rate(u16int com, u16int divisor)
 {
 	/* Note - i believe the ordering of the hi/low byte is machine dependent (not sure - conflicting data)
 	 * current configuration of bochs emulator for this project does
@@ -41,7 +41,7 @@ void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
  * 
  * @author littleosbook.github.io
  */
-void serial_configure_line(unsigned short com)
+void serial_configure_line(u16int com)
 {
 	/*
 	 * Bit:			| 7 | 6 | 5 4 3 | 2 | 1 0 |
@@ -63,7 +63,7 @@ void serial_configure_line(unsigned short com)
  *
  *	@author littleosbook.github.io
  */
-int serial_is_transmit_fifo_empty(unsigned short com)
+int serial_is_transmit_fifo_empty(u16int com)
 {
 	/* 0x20 = 0010 0000 */
 	return _inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
@@ -81,9 +81,9 @@ int serial_is_transmit_fifo_empty(unsigned short com)
  * Do i have to switch the bit that says  data_pt is empty ? *
  * Gonna test the read func as well
  */ 
-void serial_write(unsigned short com, char *buf, unsigned int len)
+void serial_write(u16int com, char *buf, int len)
 {
-	unsigned int i; 
+	int i; 
 
 	/* TODO : find a good timeout mechanism / read up more on serial port write management*/
 	for(i = 0; i < len; i++){
@@ -91,7 +91,7 @@ void serial_write(unsigned short com, char *buf, unsigned int len)
 		while(serial_is_transmit_fifo_empty(com) == 0); 
 		
 		_outb(SERIAL_DATA_PORT(com), *buf);
-		buf += 1;
+		buf++;
 	}
 		
 	return;
@@ -105,7 +105,7 @@ void serial_write(unsigned short com, char *buf, unsigned int len)
  * 		@return		 0: success
  * 					-1: failure
  */
-int serial_init(const unsigned short pt_num, const unsigned short div)
+int serial_init(const u16int pt_num, const u16int div)
 {
 	if(!div)
 		return -1;

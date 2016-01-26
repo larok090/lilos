@@ -1,7 +1,7 @@
 TODO [01/19/2016]
 ==========================================================
 
-[0] Make type declarations uniform -- 
+[V] Make type declarations uniform (io.h/io.c/serial.c/descriptors/isr/log/str_util done) 
 
 [1] Write the docs for descriptor_tables.c and interrupt handler
 

@@ -1,11 +1,4 @@
 #include "io.h"
-#include "../util/common.h"
-
-/********************************************************************************\
- *		TODO:
- *		1. Wrap WRITE function into a circular buffer 
- *
-\*******************************************************************************/
 
 /* write black and white character to output move cursor to where it was written*/
 #define FB_WRITE_CHAR_BW(i, c)						\
@@ -17,7 +10,7 @@
 char *fb = (char *)0x000B8000;
 
 /* Index of framebuffer at this moment */
-unsigned int cur_fb_pos = 0;
+u16int cur_fb_pos = 0;
 
 u8int cursor_x = 0; // max = 80
 u8int cursor_y = 0; // max = 25
@@ -26,12 +19,12 @@ u8int cursor_y = 0; // max = 25
 
 /** WRITE SECTION BEGINS HERE **/
 /** clear_screen:
- * 		Sets all the bytes of the frame buffer to display ' ' with black on black 
+ * 		Sets all the bytes of the frame buffer to display blank 
  */
 void screen_clear( void )
 {
+	// Go through framebuffer each i+2 because 2 bytes to a cell
 	int i;
-	// Go through framebuffer each i represents 1 byte - 2 bytes to a cell
 	for(i = 0; i < FB_MAX_SIZE; i+=2){
 		fb_write_cell( i , ' ', FB_BLACK, FB_WHITE);
 	}
@@ -46,17 +39,24 @@ void screen_clear( void )
  *
  * @return 		The amt of characters written from buf
  */
-int write(char *buf, unsigned int len)
+int write(char *buf, int len)
 {
-	unsigned int i = 0;
-
 	/* sanity check */
 	if(!len)
 		return -1;
 	if(!buf)
 		return -1;	
 
+	int i;
 	for(i = 0; i < len; i++){
+		cursor_x++;
+		if(cursor_x % 80 > 0){
+			cursor_y++;
+		}
+
+		if(cursor_y > 25){
+			// SCROLL FUNCTION NEEDED
+		}
 		/* do not overflow the buffer - best effort - return num chars written */
 		if(cur_fb_pos + 2 > FB_MAX_SIZE){
 			/* buffer full -> flush return the #bytes written */
@@ -64,13 +64,6 @@ int write(char *buf, unsigned int len)
 		}
 		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);		
 	}
-
-	/* after FB_WRITE_CHAR the cursor is at next empty position
-	 * This means that its 2 cursor slots ahead because of how
-	 * fb_write_cell works (cells being 16 bits long) and the macro
-	 * i - 1 is the first spot after our printed line
-	 */
-	 fb_move_cursor(i+1);
 
 	return i;
 }
@@ -85,7 +78,7 @@ int write(char *buf, unsigned int len)
  *
  * 	@author littleosbook.github.io
  */
-void fb_move_cursor(unsigned short pos)
+void fb_move_cursor(u16int pos)
 {
 	_outb(FB_COMMAND_PORT, 	FB_HIGH_BYTE_COMMAND); 
 	_outb(FB_DATA_PORT,	((pos >> 8) & 0x00FF));
@@ -104,7 +97,7 @@ void fb_move_cursor(unsigned short pos)
  *
  * @author littleosbook.github.io
  */
-void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
+void fb_write_cell(u16int i, char c , u8int fg, u8int bg)
 {
 	fb[i] = c;
 	fb[i+1] = ((fg & 0x0F) << 4) | (bg & 0x0F); 
@@ -128,7 +121,7 @@ void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
  *	@return			Mode = TO_SCREEN: #of bytes written
  *					Mode = COM_PORT: 0
  */
-int m_printf(unsigned short mode, char *buf, unsigned int len)
+int m_printf(u16int mode, char *buf, int len)
 {
 	int	wrote = 0;
 
@@ -152,7 +145,6 @@ int m_printf(unsigned short mode, char *buf, unsigned int len)
 		default:
 			wrote = -1;
 			break;
-	}
-	
+	}	
 	return wrote;
 }

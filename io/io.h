@@ -1,3 +1,5 @@
+#include "../util/common.h"
+
 #ifndef INCLUDE_IO_H
 #define INCLUDE_IO_H
 
@@ -32,7 +34,7 @@
  * 	@param port The I/O port to send the data to
  * 	@param data The data to send to the I/O port
  */
-inline void _outb(unsigned short port, unsigned char data);
+inline void _outb(u16int port, u8int data);
 
 /** (asm)_inb:
  * Read a byte from an I/O port.
@@ -40,22 +42,22 @@ inline void _outb(unsigned short port, unsigned char data);
  * @param port 	The address of the I/O port
  * @return		The read byte
  */
-inline unsigned char _inb(unsigned short port);
+inline u8int _inb(u16int port);
 
-void 	fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg);	
-void 	fb_move_cursor(unsigned short pos);
+void 	fb_write_cell(u16int i, char c , u8int fg, u8int bg);	
+void 	fb_move_cursor(u16int pos);
 
-void 	serial_configure_baud_rate(unsigned short com, unsigned short divisor);
-void 	serial_configure_line(unsigned short com);
-int		serial_is_transmit_fifo_empty(unsigned short com);
-int 	serial_init(const unsigned short pt_num, const unsigned short div);
+void 	serial_configure_baud_rate(u16int com, u16int divisor);
+void 	serial_configure_line(u16int com);
+int		serial_is_transmit_fifo_empty(u16int com);
+int 	serial_init(const u16int pt_num, const u16int div);
 
 void 	screen_clear( void );
 
-void 	serial_write(unsigned short com, char *buf, unsigned int len);
-int 	write(char *buf, unsigned int len);
+void 	serial_write(u16int com, char *buf, int len);
+int 	write(char *buf, int len);
 
-int 	m_printf(unsigned short mode,char *buf,unsigned int len);
+int 	m_printf(u16int mode,char *buf,int len);
 
 
 #endif /* INCLUDE_IO_H */

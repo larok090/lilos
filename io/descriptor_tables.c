@@ -1,4 +1,3 @@
-#include "../util/common.h"
 #include "descriptor_tables.h"
 
 extern void gdt_flush(u32int);
