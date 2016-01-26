@@ -1,4 +1,5 @@
 #include "io.h"
+#include "../util/common.h"
 
 /********************************************************************************\
  *		TODO:
@@ -18,24 +19,23 @@ char *fb = (char *)0x000B8000;
 /* Index of framebuffer at this moment */
 unsigned int cur_fb_pos = 0;
 
+u8int cursor_x = 0; // max = 80
+u8int cursor_y = 0; // max = 25
+
 
 
 /** WRITE SECTION BEGINS HERE **/
 /** clear_screen:
- * 		Sets all the bytes of the frame buffer to display \0 with black on black 
+ * 		Sets all the bytes of the frame buffer to display ' ' with black on black 
  */
-void clear_screen( void )
+void screen_clear( void )
 {
-	int  fb_pos = 0;
-	char blank = '\0';
-
-	//WHY ARE YOU GREEEN
-	while(fb_pos < FB_MAX_SIZ ){
-		fb_write_cell( fb_pos, blank , FB_BLACK  , FB_BLACK);	
-		fb_pos++;
+	int i;
+	// Go through framebuffer each i represents 1 byte - 2 bytes to a cell
+	for(i = 0; i < FB_MAX_SIZE; i+=2){
+		fb_write_cell( i , ' ', FB_BLACK, FB_WHITE);
 	}
-
-	cur_fb_pos = 0;
+	fb_move_cursor( 0 );
 }
 	
 /**
@@ -58,9 +58,8 @@ int write(char *buf, unsigned int len)
 
 	for(i = 0; i < len; i++){
 		/* do not overflow the buffer - best effort - return num chars written */
-		if(cur_fb_pos + 2 > FB_MAX_SIZ){
+		if(cur_fb_pos + 2 > FB_MAX_SIZE){
 			/* buffer full -> flush return the #bytes written */
-			fb_flush();	
 			return i-2;
 		}
 		FB_WRITE_CHAR_BW(cur_fb_pos, buf[i]);		
@@ -111,17 +110,9 @@ void fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg)
 	fb[i+1] = ((fg & 0x0F) << 4) | (bg & 0x0F); 
 }
 
-/* Clear out the frame buffer reserved mem area */
-void fb_flush( void )
-{
-	int i;
-	char *fb_tmp = fb;
 
-	for( i = 0; i < FB_MAX_SIZ; i++){
-		fb_tmp = 0;
-		fb_tmp++;
-	}
-}
+/** DEPRECATED ---> In process of deletion **/
+
 /** FRAME BUFFER OPERATIONS END ***/
 
 /**
@@ -134,8 +125,8 @@ void fb_flush( void )
  * 	@param	buf		The buffer to be printed
  *	@param	len		Length of the buffer
  *
- *	@return			Mode = 0: #of bytes written
- *					Mode = N: 0
+ *	@return			Mode = TO_SCREEN: #of bytes written
+ *					Mode = COM_PORT: 0
  */
 int m_printf(unsigned short mode, char *buf, unsigned int len)
 {

@@ -12,8 +12,8 @@
 #define FB_HIGH_BYTE_COMMAND	14
 #define FB_LOW_BYTE_COMMAND		15
 
-/* The max size of the frame buffer 80 columns 2 bytes each = 160 * 25 rows = 4000*/
-#define FB_MAX_SIZ			 	4000	
+/* The max size of the frame buffer 80 columns 2 bytes each = 80 * 25 rows = 4000*/
+#define FB_MAX_SIZE			 	(80 * 25)		
 
 /* Colors */
 #define FB_BLACK				0
@@ -44,14 +44,13 @@ inline unsigned char _inb(unsigned short port);
 
 void 	fb_write_cell(unsigned int i, char c , unsigned char fg, unsigned char bg);	
 void 	fb_move_cursor(unsigned short pos);
-void 	fb_flush(void);
 
 void 	serial_configure_baud_rate(unsigned short com, unsigned short divisor);
 void 	serial_configure_line(unsigned short com);
 int		serial_is_transmit_fifo_empty(unsigned short com);
 int 	serial_init(const unsigned short pt_num, const unsigned short div);
 
-void 	clear_screen( void );
+void 	screen_clear( void );
 
 void 	serial_write(unsigned short com, char *buf, unsigned int len);
 int 	write(char *buf, unsigned int len);

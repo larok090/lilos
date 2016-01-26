@@ -12,7 +12,7 @@
  */
 void isr_handler(registers_t regs)
 {
-	clear_screen();
+	screen_clear();
 
 	u32int ino = regs.error_code;	
 	char s[6] = "int ";

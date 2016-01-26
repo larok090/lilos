@@ -6,7 +6,7 @@ AS = nasm
 ASFLAGS = -f elf
 
 ASM_OBJ = io/asm_io.o io/asm_gdt.o io/asm_interrupt.o
-IO_OBJ =  io/io.o io/serial.o io/str_util.o io/log.o io/descriptor_tables.o io/isr.o
+IO_OBJ =  io/io.o io/serial.o io/descriptor_tables.o io/isr.o
 UTIL_OBJ = util/common.o
 OBJECTS = loader.o kmain.o $(ASM_OBJ) $(IO_OBJ) $(UTIL_OBJ) 
 

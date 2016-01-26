@@ -1,5 +1,8 @@
 TODO [01/19/2016]
 ==========================================================
+
+[0] Make type declarations uniform -- 
+
 [1] Write the docs for descriptor_tables.c and interrupt handler
 
 [2] REORGANIZE - move stuff to common.h in UTILS 
@@ -7,6 +10,8 @@ TODO [01/19/2016]
 [3] COMMENT interupt code stuff - update notes / readme 
 
 [4] #5 on low prio should be easy enough
+		--> Redo how write is implemented
+		--> change the m_printf
 
 ==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
 		now would be a good time to revisit code structure 
@@ -27,11 +32,12 @@ TODO [01/19/2016]
 ==========================================================
 LOW PRIO 
 ==========================================================
-1. [SERIAL.c] 
-	- define the flags for changing configs on serial ports 
+1. REDO MAKEFILE split across all folders to have one that is triggered ? TO make it easier to change small things and
+	have one main make 
+	[Downside] Harder to track dependencies .. might need a dependance graph
 
-2. Think of a good return value for print to serial 
+2. Draw quick diagrams / update IO diagram for the OS -- Take that as a lesson for design.. not so good to have to refactor on every module
 
 3. [LATER WORK - @timer] A good timeout mechanism / read up more on serial port write management
 
-5. Cursor still wonky - doesnt display after clear screen COME BACK TO IT USING JAMESMOLLOY.co.uk
+
