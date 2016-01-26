@@ -1,17 +1,20 @@
-TODO [01/19/2016]
+TODO 
 ==========================================================
 
 [V] Make type declarations uniform (io.h/io.c/serial.c/descriptors/isr/log/str_util done) 
 
+[V] In common.h I need a memcpy function alongside the memset
+
 [1] Write the docs for descriptor_tables.c and interrupt handler
 
 [2] REORGANIZE - move stuff to common.h in UTILS 
+		- printf
 
 [3] COMMENT interupt code stuff - update notes / readme 
 
 [4] #5 on low prio should be easy enough
 		--> Redo how write is implemented
-		--> change the m_printf
+		--> change the m_printf (and move to common.h)
 
 ==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
 		now would be a good time to revisit code structure 

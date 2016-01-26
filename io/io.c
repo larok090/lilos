@@ -32,7 +32,7 @@ void screen_clear( void )
 }
 	
 /**
- * Write the given buffer to the stdout in our case the shell
+ * Write the given buffer to the stdout in our case the screen
  *
  * @param len	length of the buffer
  * @param buf 	The buffer with content to be written to shell
@@ -49,15 +49,19 @@ int write(char *buf, int len)
 
 	int i;
 	for(i = 0; i < len; i++){
+
 		cursor_x++;
+
 		if(cursor_x % 80 > 0){
 			cursor_y++;
+			cursor_x = 0;	
+
+			if(cursor_y > 25){
+				// SCROLL FUNCTION NEEDED
+			}
 		}
 
-		if(cursor_y > 25){
-			// SCROLL FUNCTION NEEDED
-		}
-		/* do not overflow the buffer - best effort - return num chars written */
+		/* still building the replacement here */
 		if(cur_fb_pos + 2 > FB_MAX_SIZE){
 			/* buffer full -> flush return the #bytes written */
 			return i-2;
@@ -67,6 +71,19 @@ int write(char *buf, int len)
 
 	return i;
 }
+
+/**
+ * scroll( void )
+ * 		If we run out of framebuffer space move down a line leave line 24 empty
+ */
+/*
+static void scroll( void )
+{
+	char *video_mem;
+
+}
+*/
+
 /** END WRITE SEC **/
 
 /*** FRAME BUFFER OPERATIONS START ***/
@@ -113,8 +130,8 @@ void fb_write_cell(u16int i, char c , u8int fg, u8int bg)
  * 	Prints to the source defined by mode argument:
  *			Best effort , writes as much as it can gives back that #
  *
- * 	@param  mode	0: print to screen
- * 					any other number is treated as COM address		 
+ * 	@param  mode	TO_SCREEN (0): print to screen
+ * 					any other number: treated as COM address		 
  * 	@param	buf		The buffer to be printed
  *	@param	len		Length of the buffer
  *

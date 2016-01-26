@@ -13,10 +13,8 @@ typedef          short s16int;
 typedef unsigned char  u8int;
 typedef          char  s8int;
 
-/**
- * memset -- fills len bytes pointed to by ptr with value of mem
- */
-void memset(void *, int, int);
+void memset(void *ptr, int mem, int len);
+void memcpy(void *src, void *dest, int len); 
 
 
 #endif

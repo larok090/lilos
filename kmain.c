@@ -20,8 +20,9 @@ int kmain()
 
 	/* hello world!*/
 	char buf[21] = "hello (kernel) world";	
+
 	m_printf(TO_SCREEN, buf, 20); 
-	m_printf(SERIAL_COM1_BASE, buf, 20); 
+	m_printf(SERIAL_COM1_BASE, buf, 21); 
 
 
 	/* Error log (serial pt 2) test */
