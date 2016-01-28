@@ -1,7 +1,8 @@
 ==========================================================
 TODO 
 ==========================================================
-[0] COMMENTS COMMENTS COMMENTS 
+*** might want to work on the delayed things for later **** 
+[0] screen_write_dec / screen_write_hex move to common so we don't include io.h in main.
 
 [1] Write the docs for descriptor_tables.c and interrupt handler
 
@@ -14,7 +15,10 @@ TODO
 		--> Redo how write is implemented
 		--> change the m_printf (and move to common.h)
 
-[5] Move on to IRQ and user mode 
+[5] user space tests for string operations with no libs in C.
+	[BUG] Passing a string dirrectly to screen_write crashes literally everything ex. screen_write("Hello World")
+
+[6] Move on to IRQ and user mode 
 
 ==========================================================
 LOW PRIO 

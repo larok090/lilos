@@ -23,11 +23,10 @@ void isr_handler(registers_t regs)
 		s[5] = '4';
 	}
 	else{
-		s[5] = '0';
+		s[5] = 'o';
 	}
 
 	screen_write(s);
-//	write(s, 6);	
 
 	return;
 }

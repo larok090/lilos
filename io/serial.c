@@ -93,7 +93,7 @@ void serial_write(u16int com, char *buf, int len)
 		_outb(SERIAL_DATA_PORT(com), *buf);
 		buf++;
 	}
-		
+	
 	return;
 }
 

@@ -51,13 +51,12 @@ void 	serial_configure_baud_rate(u16int com, u16int divisor);
 void 	serial_configure_line(u16int com);
 int		serial_is_transmit_fifo_empty(u16int com);
 int 	serial_init(const u16int pt_num, const u16int div);
+void 	serial_write(u16int com, char *buf, int len);
 
 void 	screen_clear( void );
 void 	screen_put(char c);
+void 	screen_write(char *c);
 
-void 	serial_write(u16int com, char *buf, int len);
-//int 	write(char *buf, int len);
-void screen_write(char *c);
 
 
 #endif /* INCLUDE_IO_H */

@@ -6,8 +6,6 @@
 /* Framebuffer (for displaying chracters on screen) */
 u16int *fb = (u16int *)0x000B8000;
 
-/* Index of framebuffer at this moment */
-
 u8int cursor_x = 0; // max = 80
 u8int cursor_y = 0; // max = 25
 

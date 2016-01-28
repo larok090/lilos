@@ -17,7 +17,6 @@ int kmain()
 
 	/* make the screen blank (clear all initial load messages from bochs) */
 	screen_clear(); 
-
 	
 	/* hello world!*/
 	char buf[21] = "hello (kernel) world";		
