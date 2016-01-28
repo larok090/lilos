@@ -18,16 +18,15 @@ int kmain()
 	/* make the screen blank (clear all initial load messages from bochs) */
 	screen_clear(); 
 
+	
 	/* hello world!*/
-	char buf[21] = "hello (kernel) world";	
+	char buf[21] = "hello (kernel) world";		
+	screen_write(buf);
+	serial_write(SERIAL_COM1_BASE, buf, 21); 
 
-	m_printf(TO_SCREEN, buf, 20); 
-	m_printf(SERIAL_COM1_BASE, buf, 21); 
-
-
-	/* Error log (serial pt 2) test */
+	// Error log (serial pt 2) test  - Need to wrap that in a 
 	char str[11] = "ERROR: TEST";
-	m_printf(SERIAL_COM2_BASE, str, 11); 
+	serial_write(SERIAL_COM2_BASE, str, 11); 
 
 
 	/* Interupt test */ 

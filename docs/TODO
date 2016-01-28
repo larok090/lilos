@@ -1,9 +1,7 @@
 ==========================================================
 TODO 
 ==========================================================
-
-
-[0] io.c - scroll
+[0] COMMENTS COMMENTS COMMENTS 
 
 [1] Write the docs for descriptor_tables.c and interrupt handler
 
@@ -16,6 +14,8 @@ TODO
 		--> Redo how write is implemented
 		--> change the m_printf (and move to common.h)
 
+[5] Move on to IRQ and user mode 
+
 ==========================================================
 LOW PRIO 
 ==========================================================
@@ -27,6 +27,7 @@ LOW PRIO
 
 3. [LATER WORK - @timer] A good timeout mechanism / read up more on serial port write management
 
+4. io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio??
 
 ==========================================================
 DELAYED
@@ -47,7 +48,8 @@ DONE
 
 [V] In common.h I need a memcpy function alongside the memset
 
-
+[V] io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio??
+		-- Scroll works .. just going to leave the non-null term string thing for later
 
 ==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
 		now would be a good time to revisit code structure 
