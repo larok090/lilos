@@ -15,18 +15,10 @@ void isr_handler(registers_t regs)
 	screen_clear();
 
 	u32int ino = regs.error_code;	
-	char s[6] = "int ";
-	
-	if(ino == 3)
-		s[5] = '3';
-	if(ino == 4){
-		s[5] = '4';
-	}
-	else{
-		s[5] = 'o';
-	}
+	char str[8] = "int no: ";	
 
-	screen_write(s);
+	kprint(str);
+	kprint_dec(ino);
 
 	return;
 }

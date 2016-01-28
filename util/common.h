@@ -16,5 +16,8 @@ typedef          char  s8int;
 void memset(void *ptr, int mem, int len);
 void memcpy(void *src, void *dest, int len); 
 
+void kprint(char *buf);
+void kprint_dec(int buf);
+void kprint_hex(char *buf);
 
 #endif

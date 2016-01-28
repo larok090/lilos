@@ -9,7 +9,7 @@ u16int *fb = (u16int *)0x000B8000;
 u8int cursor_x = 0; // max = 80
 u8int cursor_y = 0; // max = 25
 
-
+static void scroll( void );
 
 /** WRITE SECTION BEGINS HERE **/
 //=================================================//
@@ -27,41 +27,14 @@ void screen_clear( void )
 	for(i = 0; i < FB_MAX_SIZE; i++){
 		fb[i] = blank;
 	}
+	cursor_x = 0;
+	cursor_y = 0;
 	fb_move_cursor( 0 );
 }
 
-// Scrolls the text on the screen up by one line.
-// @author jamesmolloy.co.uk
-static void scroll()
-{
-
-   // Get a space character with the default colour attributes.
-   u8int attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
-   u16int blank = 0x20 /* space */ | (attributeByte << 8);
-
-   // Row 25 is the end, this means we need to scroll up
-   if(cursor_y >= 25)
-   {
-       // Move the current text chunk that makes up the screen
-       // back in the buffer by a line
-       int i;
-       for (i = 0*80; i < 24*80; i++)
-       {
-           fb[i] = fb[i+80];
-       }
-
-       // The last line should now be blank. Do this by writing
-       // 80 spaces to it.
-       for (i = 24*80; i < 25*80; i++)
-       {
-           fb[i] = blank;
-       }
-       // The cursor should now be on the last line.
-       cursor_y = 24;
-   }
-}
 
 // Writes a single character out to the screen.
+// @author jamesmolloy.co.uk
 void screen_put(char c)
 {
    u16int attribute = SET_CHAR_COLOR(FB_BLACK, FB_WHITE);
@@ -99,7 +72,7 @@ void screen_put(char c)
        *location = c | attribute;
        cursor_x++;
    }
-
+	
    // Check if we need to insert a new line because we have reached the end
    // of the screen.
    if (cursor_x >= 80)
@@ -116,7 +89,6 @@ void screen_put(char c)
 
 }
 
-
 /**
  * Write the given buffer to the stdout in our case the screen
  * 	- Caviat: Non null term strings will give blow up. Need to figure this out ****
@@ -128,6 +100,37 @@ void screen_write(char *c)
    {
        screen_put(c[i]);
 	   i++;
+   }
+}
+
+// Scrolls the text on the screen up by one line.
+// @author jamesmolloy.co.uk
+static void scroll()
+{
+
+   // Get a space character with the default colour attributes.
+   u8int attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
+   u16int blank = 0x20 /* space */ | (attributeByte << 8);
+
+   // Row 25 is the end, this means we need to scroll up
+   if(cursor_y >= 25)
+   {
+       // Move the current text chunk that makes up the screen
+       // back in the buffer by a line
+       int i;
+       for (i = 0*80; i < 24*80; i++)
+       {
+           fb[i] = fb[i+80];
+       }
+
+       // The last line should now be blank. Do this by writing
+       // 80 spaces to it.
+       for (i = 24*80; i < 25*80; i++)
+       {
+           fb[i] = blank;
+       }
+       // The cursor should now be on the last line.
+       cursor_y = 24;
    }
 }
 

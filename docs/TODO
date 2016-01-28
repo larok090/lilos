@@ -3,8 +3,7 @@ TODO
 ==========================================================
 *** might want to work on the delayed things for later **** 
 [0] screen_write_dec / screen_write_hex move to common so we don't include io.h in main.
-
-[1] Write the docs for descriptor_tables.c and interrupt handler
+		-- ties in with #2 
 
 [2] REORGANIZE - move stuff to common.h in UTILS 
 		- printf
@@ -18,7 +17,7 @@ TODO
 [5] user space tests for string operations with no libs in C.
 	[BUG] Passing a string dirrectly to screen_write crashes literally everything ex. screen_write("Hello World")
 
-[6] Move on to IRQ and user mode 
+[6]  Write the docs for descriptor_tables.c and interrupt handler
 
 ==========================================================
 LOW PRIO 
@@ -54,6 +53,8 @@ DONE
 
 [V] io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio??
 		-- Scroll works .. just going to leave the non-null term string thing for later
+
+[V] Figure out why isr doesn't pass an interrupt code to in the registrs_t struct we get in isr_handler (still an issue with higher interrupts but we haven't dealt with that yet
 
 ==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
 		now would be a good time to revisit code structure 

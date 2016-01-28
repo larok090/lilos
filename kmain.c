@@ -20,7 +20,7 @@ int kmain()
 	
 	/* hello world!*/
 	char buf[21] = "hello (kernel) world";		
-	screen_write(buf);
+	kprint(buf);
 	serial_write(SERIAL_COM1_BASE, buf, 21); 
 
 	// Error log (serial pt 2) test  - Need to wrap that in a 
