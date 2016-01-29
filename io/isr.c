@@ -16,7 +16,7 @@ void isr_handler(registers_t regs)
 	char str[20] = "\ninterrupt no: ";	
 
 	print(str);
-	print_dec((char *)ino);
+	print_dec((int)ino);
 
 	return;
 }

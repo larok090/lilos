@@ -86,7 +86,6 @@ void screen_put(char c)
 
    // Move the hardware cursor.
    fb_move_cursor(CURSOR_POS());
-
 }
 
 /**

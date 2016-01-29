@@ -35,6 +35,16 @@ struct gdt_entry_struct
 
 typedef struct gdt_entry_struct gdt_entry_t;
 
+// A struct describing a pointer to an array of interrupt handlers.
+// This is in a format suitable for giving to lidt instruction.
+struct idt_ptr_struct
+{
+	u16int limit;
+	u32int base;			// The address of the first element in our idt_entery_t array.
+} __attribute__((packed));
+
+typedef struct idt_ptr_struct idt_ptr_t;
+
 struct idt_entry_struct
 {
 	u16int	base_lo;		// The lower 16 bits of the address to jmp to when interrupt fires.
@@ -45,16 +55,6 @@ struct idt_entry_struct
 } __attribute__((packed));
 
 typedef struct idt_entry_struct idt_entry_t;
-
-// A struct describing a pointer to an array of interrupt handlers.
-// This is in a format suitable for giving to lidt instruction.
-struct idt_ptr_struct
-{
-	u16int limit;
-	u32int base;			// The address of the first element in our idt_entery_t array.
-} __attribute__((packed));
-
-typedef struct idt_ptr_struct idt_ptr_t;
 
 void init_descriptor_tables();
 

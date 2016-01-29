@@ -2,7 +2,7 @@ U.S.E.L-OS (uncomplicated sample exercise little OS)
 -----------------------------------------------
 
 Boot : 
-	/* todo */
+	~ /* todo */
 
 Structure:
 	
@@ -24,16 +24,16 @@ Structure:
 io.h functions:
 	+ inb				- function wrapper for "in" assembly instruction	
 	+ outb				- function wrapper for "out" assemby instruction
-	+ fb_write_cell		- write character in a given cell of framebuffer
+	+ fb_write_cell		- /* DEPRECATED - use screen_put*/ write character in a given cell of framebuffer
 	+ fb_move_cursor	- move cursor on screen 	
-	+ fb_flush 			- sets all of frame buffer mem to 0 (like memset b/c no stdlib)
-	+ clear_screen		- prints the entirety of frame buffer to be '\0' i.e clear
-	+ write 			- Write a given buffer to stdout through use of framebuffer
+	+ screen_clear		- prints the entirety of frame buffer to be blank
+	+ screen_write		- Write a given buffer to stdout through use of framebuffer
+	+ screen_put		- New improved fb_write_cell - handles tabs, carriage return, new lines etc.
 
 io.c 		- implementation of io.h
 asm_io.s 	- out/in instruction implementation (assembly)
 
-ser_pt.c - SERIAL PORT configurations:
+serial.c - SERIAL PORT configurations (includes serial.h):
 ---------------------------------------
 	+ serial_configure_line			- Configure line for a given serial port set to 0x03
 										0x03 flag (hardcoded now 12/12/15 O.B):
@@ -49,17 +49,60 @@ ser_pt.c - SERIAL PORT configurations:
 	+ serial_init					- using default values in serial_confg_baud_rate
 										and serial_configure_line init a compt
 
-
-log.c - LOGGING UTILITIES
-----------------------------------------
-	- Uses com2 serial port to log to a file debug.log
+descriptor_tables.h 
+---------------------------------------
+INFO: Holds the data structures for global descriptor table and interrupt descriptor table
+	~ gdt_ptr_struct:		The actual table for segment descriptors 
+	~ gdt_entry_struct:		data structure for gdt entries (aka segment selectors 
 	
-	+ log_msg to print the right message with a certain tag
+	~ idt_ptr_struct		The table for holding interrupt informations
+	~ idt_entry_struct		Interrupt descriptors
 
-
-DESCRIPTOR TABLES WORKING !!! WOOOO [01/19/2016]
+	+ isr0-31 ()			Functions for accessing assembly interrupt handlers in interrupt.
+		
+descriptor_tables.c
+------------------------------------------
+INFO: Sets up the GDT and IDT and loads them into memory
 	
-IO MACROS
-============================
-#define TO_SCREEN	0xFFF
-	-magic number identifier 
+	+ init_descriptor_tables: wrapper for initializing and loading idt and gdt
+
+	+ init_gdt():		sets address space for gdt and initilizes segment selectors/ loads gdt	 
+	+ gdt_set_gate:		Initializes a segment selector
+	+ gdt_flush			Loads gdt into memory  [ assembly ]
+
+	+ init_idt():		sets address space for idt and inits interrupt handlers / loads idt
+	+ idt_set_gate:		initalizs interrupt handlers (partly assembly)
+	+ idt_flush			Loads idt into memory
+
+
+isr.h
+----------------------------------------------
+INFO: interrupt service routines data structure 
+
+	~ struct registers:		saves info from all registers to service interrupts
+							also stores interrupt number and error code if present
+
+isr.c
+----------------------------------------------
+INFO: general isr handler
+
+	+ isr_handler:		takes a struct register input and prints the interrupt error_code
+						or zero upon recieveing a system interrupt
+
+
+~/util/
+==========================================================================
+
+common.h
+---------------------------------------------------------------
+INFO: common functions / data structs
+
+	- holds uniform size declarations to avoid using "unsigned int / char / short" we use size declarations like u16int / u32int / u8int 
+	
+		
+	- memset:			- Fills len bytes starting from ptr with mem.
+	- memcpy:			- Copies first len bytes from src to dest 
+
+	- print: 			- wrapper for screen_write // not sure if thats staying here at all
+	- print_dec:		- prints an integer to the screen`
+	- print_hex:		- not implemented yet .. up in the air about this and print_dec
