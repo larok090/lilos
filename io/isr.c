@@ -12,13 +12,11 @@
  */
 void isr_handler(registers_t regs)
 {
-	screen_clear();
-
 	u32int ino = regs.error_code;	
-	char str[8] = "int no: ";	
+	char str[20] = "\ninterrupt no: ";	
 
-	kprint(str);
-	kprint_dec(ino);
+	print(str);
+	print_dec((char *)ino);
 
 	return;
 }

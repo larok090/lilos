@@ -1,6 +1,8 @@
 #include "common.h"
 #include "../io/io.h"
 
+//static char int_to_char(int);
+
 /**
  * memset:
  * 		Fills len bytes starting from ptr with mem.
@@ -40,62 +42,72 @@ void memcpy(void *src, void *dest, int len)
  * Write the given buffer to the stdout in our case the screen
  * 	- Caviat: Non null term strings will give blow up. Need to figure this out ****
  */
-void kprint(char *buf)
+void print(char *buf)
 {
-	int i = 0;
-	while (buf[i])
-	{
-	   screen_put(buf[i++]);
-	}
+   int i = 0;
+   while (buf[i])
+   { 
+       screen_put(buf[i]);
+	   i++;
+   }
 }
 
 /**
  * kprint_dec:
  * 	 takes an integer input and prints the character version to screen
  */
-void kprint_dec(int buf)
+void print_dec(int n)
 {
-	char c = 'e';
+	// range of numeric val = 48(0) - 57(9)
+    screen_put(n + 48);
+}
 
+void print_hex(char *buf)
+{
+	screen_put('0');
+	screen_put('x');
+
+   int i = 0;
+   while (buf[i])
+   { 
+       screen_put(buf[i]);
+	   i++;
+   }
+}
+/*
+static char int_to_char(int buf)
+{
 	if(buf == 1){
-		c = '1';
+		return '1';
 	}
 	else if(buf == 2){
-		c = '2';
+		return '2';
 	}
 	else if(buf == 3){
-		c = '3';
+		return '3';
 	}
 	else if(buf == 4){
-		c = '4';
+		return '4';
 	}
 	else if(buf == 5){
-		c = '5';
+		return '5';
 	}
 	else if(buf == 6){
-		c = '6';
+		return '6';
 	}
 	else if(buf == 7){
-		c = '7';
+		return '7';
 	}
 	else if(buf == 8){
-		c = '8';
+		return '8';
 	}
 	else if(buf == 9){
-		c = '9';
+		return '9';
 	}
 	else if(buf == 0){
-		c = '0';
+		return '0';
 	}
 
-	screen_put(c);	
-}
+	return 'e';
 
-void kprint_hex(char *buf)
-{
-	int i = 0;
-	while (buf[i])
-	{
-	   screen_put(buf[i++]);
-	}
-}
+}*/

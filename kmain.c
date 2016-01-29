@@ -17,19 +17,18 @@ int kmain()
 
 	/* make the screen blank (clear all initial load messages from bochs) */
 	screen_clear(); 
-	
-	/* hello world!*/
+
+	// hello world!
 	char buf[21] = "hello (kernel) world";		
-	kprint(buf);
+	print(buf);
 	serial_write(SERIAL_COM1_BASE, buf, 21); 
 
-	// Error log (serial pt 2) test  - Need to wrap that in a 
+	// Error log (serial pt 2) test 
 	char str[11] = "ERROR: TEST";
 	serial_write(SERIAL_COM2_BASE, str, 11); 
 
-
-	/* Interupt test */ 
-//	asm volatile ("int $0x3");
+	// Interupt test  
+	asm volatile ("int $0x3");
 //	asm volatile ("int $0x4");
 
 	return 0;

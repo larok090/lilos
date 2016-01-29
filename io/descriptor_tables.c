@@ -14,14 +14,19 @@ gdt_ptr_t   gdt_ptr;
 idt_entry_t	idt_entries[256];
 idt_ptr_t	idt_ptr;
 
-/* Initalization of GDT */
+/* Initialize and load  GDT & IDT */
 void init_descriptor_tables()
 {
-	// Builds and loads the GDT
 	init_gdt();
 	init_idt();
 }
 
+/**
+ * init_gdt():
+ * 		Init gdt sets the entry point to our global descriptor table and its limit address
+ * 		For now there are 5 entries in this table, each one a segment descriptor.
+ * 		Also initializes the 5 entries with gdt_set_gate. First segment is always null.
+ */
 static void init_gdt()
 {
 	gdt_ptr.limit = (sizeof(gdt_entry_t) * 5) - 1;
@@ -36,6 +41,12 @@ static void init_gdt()
     gdt_flush((u32int)&gdt_ptr);
 }
 
+/** 
+ * gdt_set_gate:
+ * 	 This function initializes segment selectors in the global descriptor table. Each 
+ * 	 descriptor has its address space, access ring and granularity set.
+ * 	 More info on why the values are what they are @ jamesmolloy.co.uk
+ */
 static void gdt_set_gate(s32int num, u32int base, u32int limit, u8int access, u8int gran)
 {
    gdt_entries[num].base_lo    = (base & 0xFFFF);
@@ -49,6 +60,14 @@ static void gdt_set_gate(s32int num, u32int base, u32int limit, u8int access, u8
    gdt_entries[num].access      = access;
 }
 
+/**
+ * 	init_idt():
+ * 		Initializes the interrupt descriptor table and loads it. Has a base and a
+ * 		limit specified in here. Limit is the number of possible interrupts in our case it's
+ * 		256 idt_entry_t array items.
+ * 		Uses idt_set_gate for each one of the 32 predefined hardware interrupts.
+ * 		The initialization use (u32int)isrX() functions defined in interrupt.s assembly.
+ */
 static void init_idt()
 {
 	idt_ptr.limit	= (sizeof(idt_entry_t) * 256) - 1;
@@ -89,10 +108,15 @@ static void init_idt()
 	idt_set_gate( 30, (u32int)isr30, 0x08, 0x8E);
 	idt_set_gate( 31, (u32int)isr31, 0x08, 0x8E);
 	
-
+	// Loads the IDT into memory
 	idt_flush((u32int)&idt_ptr);
 }
 
+/**
+ * idt_set_gate():
+ * 	Initializes an entry to the IDT with an address space and segment select / flags.
+ * 	@params -- more info @ jamesmolloy.co.uk - GDT / IDT section
+ */
 static void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags)
 {
 	idt_entries[num].base_lo	= base & 0xFFFF;

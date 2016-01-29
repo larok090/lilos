@@ -2,22 +2,15 @@
 TODO 
 ==========================================================
 *** might want to work on the delayed things for later **** 
-[0] screen_write_dec / screen_write_hex move to common so we don't include io.h in main.
-		-- ties in with #2 
 
-[2] REORGANIZE - move stuff to common.h in UTILS 
-		- printf
-
-[3] COMMENT interupt code stuff - update notes / readme 
-
-[4] #5 on low prio should be easy enough
-		--> Redo how write is implemented
-		--> change the m_printf (and move to common.h)
+[3] COMMENT(V) interupt code stuff - update notes (X) / readme (X)
 
 [5] user space tests for string operations with no libs in C.
 	[BUG] Passing a string dirrectly to screen_write crashes literally everything ex. screen_write("Hello World")
 
 [6]  Write the docs for descriptor_tables.c and interrupt handler
+
+[7] implement write_hex 
 
 ==========================================================
 LOW PRIO 
@@ -30,7 +23,6 @@ LOW PRIO
 
 3. [LATER WORK - @timer] A good timeout mechanism / read up more on serial port write management
 
-4. io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio??
 
 ==========================================================
 DELAYED
@@ -43,6 +35,7 @@ DELAYED
 [DELAYED] str_utils.h  - BACKBURNER - need memory have to do that first  not enough space
 	- need functions to print integers for return val printing 
 
+[...] io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio??
 
 ==========================================================
 DONE
@@ -51,10 +44,13 @@ DONE
 
 [V] In common.h I need a memcpy function alongside the memset
 
-[V] io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio??
+[V] io.c - FIX WRITE - doesnt quite do it right ... not nul terminated string -- come back later low prio?? [01/27/16]
 		-- Scroll works .. just going to leave the non-null term string thing for later
 
-[V] Figure out why isr doesn't pass an interrupt code to in the registrs_t struct we get in isr_handler (still an issue with higher interrupts but we haven't dealt with that yet
+[V] Figure out why isr doesn't pass an interrupt code to in the registrs_t struct we get in isr_handler (still an issue with higher interrupts but we haven't dealt with that yet [01/28/16]
+
+[V] REORGANIZE - move stuff to common.h in UTILS [01/29/16]
+		- print / print_dec 
 
 ==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
 		now would be a good time to revisit code structure 
