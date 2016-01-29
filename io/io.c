@@ -3,16 +3,12 @@
 #define CURSOR_POS() 80 * cursor_y + cursor_x
 #define SET_CHAR_COLOR(bg,fg) ( (bg << 4) | (fg & 0x0F) ) << 8;
 
-/* Framebuffer (for displaying chracters on screen) */
-u16int *fb = (u16int *)0x000B8000;
-
-u8int cursor_x = 0; // max = 80
-u8int cursor_y = 0; // max = 25
-
 static void scroll( void );
 
-/** WRITE SECTION BEGINS HERE **/
-//=================================================//
+/* Framebuffer (for displaying chracters on screen) */
+u16int *fb = (u16int *)0x000B8000;
+u8int cursor_x = 0; // max = 80
+u8int cursor_y = 0; // max = 25
 
 /** clear_screen:
  * 		Sets all the bytes of the frame buffer to display blank 
@@ -32,7 +28,6 @@ void screen_clear( void )
 	fb_move_cursor( 0 );
 }
 
-
 // Writes a single character out to the screen.
 // @author jamesmolloy.co.uk
 void screen_put(char c)
@@ -45,20 +40,17 @@ void screen_put(char c)
    {
        cursor_x--;
    }
-
    // Handle a tab by increasing the cursor's X, but only to a point
    // where it is divisible by 8.
    else if (c == 0x09)
    {
        cursor_x = (cursor_x+8) & ~(8-1);
    }
-
    // Handle carriage return
    else if (c == '\r')
    {
        cursor_x = 0;
    }
-
    // Handle newline by moving cursor back to left and increasing the row
    else if (c == '\n')
    {
@@ -72,7 +64,6 @@ void screen_put(char c)
        *location = c | attribute;
        cursor_x++;
    }
-	
    // Check if we need to insert a new line because we have reached the end
    // of the screen.
    if (cursor_x >= 80)
@@ -122,8 +113,7 @@ static void scroll()
            fb[i] = fb[i+80];
        }
 
-       // The last line should now be blank. Do this by writing
-       // 80 spaces to it.
+       // The last line should now be blank. Do this by writin 80 spaces to it.
        for (i = 24*80; i < 25*80; i++)
        {
            fb[i] = blank;
@@ -133,11 +123,6 @@ static void scroll()
    }
 }
 
-/** END WRITE SEC **/
-//=======================================================//
-
-/*** FRAME BUFFER OPERATIONS START ***/
-//========================================================//
 /** 
  * fb_move_cursor:
  * 	Moves the cursor of the framebuffer to the given position
@@ -170,5 +155,3 @@ void fb_write_cell(u16int i, char c , u8int fg, u8int bg)
 	fb[i] = c;
 	fb[i+1] = ((fg & 0x0F) << 4) | (bg & 0x0F); 
 }
-
-/** FRAME BUFFER OPERATIONS END ***/

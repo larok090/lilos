@@ -1,16 +1,9 @@
 ==========================================================
 TODO 
 ==========================================================
-*** might want to work on the delayed things for later **** 
+[1] ISR / USER MODE .. gotta keep moving 
 
-[3] COMMENT(V) interupt code stuff - update notes (X) / readme (X)
-
-[5] user space tests for string operations with no libs in C.
-	[BUG] Passing a string dirrectly to screen_write crashes literally everything ex. screen_write("Hello World")
-
-[6]  Write the docs for descriptor_tables.c and interrupt handler
-
-[7] implement write_hex 
+[2] and on....
 
 ==========================================================
 LOW PRIO 
@@ -51,6 +44,10 @@ DONE
 
 [V] REORGANIZE - move stuff to common.h in UTILS [01/29/16]
 		- print / print_dec 
+
+[V]  Write the docs for descriptor_tables.c and interrupt handler
+
+[V] COMMENT(V) interupt code stuff - update notes (V) / readme (V)
 
 ==> BIG MILESTONE: got interrupts working (somewhat ) need to rework printing and come back to str utils
 		now would be a good time to revisit code structure 
