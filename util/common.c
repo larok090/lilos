@@ -74,6 +74,7 @@ void print_hex(char *buf)
 	   i++;
    }
 }
+
 /*
 static char int_to_char(int buf)
 {

@@ -1,9 +1,13 @@
 ==========================================================
 TODO 
 ==========================================================
-[1] ISR / USER MODE .. gotta keep moving 
+[0] implement screen_write_hex() .. use write_dec / write_hex to implement a good modular
+	printf 
+[1] Reread the string section in jamesmolloy.co.uk page, see why we blow up with "string" phrasing? It's odd
 
-[2] and on....
+[2] ISR / USER MODE .. gotta keep moving 
+
+[3] and on....
 
 ==========================================================
 LOW PRIO 

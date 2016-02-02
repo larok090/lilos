@@ -1,10 +1,8 @@
 /**
- *
  * isr.c -- higher lever interrupt service routines and interrupt request handlers.
  */
 
 #include "isr.h"
-#include "io.h"
 #include "../util/common.h"
 
 /**

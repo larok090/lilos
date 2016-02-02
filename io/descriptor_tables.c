@@ -49,7 +49,7 @@ static void init_gdt()
  */
 static void gdt_set_gate(s32int num, u32int base, u32int limit, u8int access, u8int gran)
 {
-   gdt_entries[num].base_lo    = (base & 0xFFFF);
+   gdt_entries[num].base_lo		= (base & 0xFFFF);
    gdt_entries[num].base_middle = (base >> 16) & 0xFF;
    gdt_entries[num].base_high   = (base >> 24) & 0xFF;
 
